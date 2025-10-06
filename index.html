@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Labkom - Yayasan Daarul Amiin IBS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .mobile-hidden { display: none !important; }
+            .mobile-full { width: 100% !important; }
+            .mobile-text-sm { font-size: 0.875rem !important; }
+            .mobile-p-2 { padding: 0.5rem !important; }
+            .mobile-p-4 { padding: 1rem !important; }
+            .mobile-mb-4 { margin-bottom: 1rem !important; }
+            .mobile-grid-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+            .mobile-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+            .mobile-space-x-2 > * + * { margin-left: 0.5rem !important; }
+            .mobile-overflow-x { overflow-x: auto !important; }
+            .mobile-min-w-full { min-width: 100% !important; }
+        }
+        
+        /* Tablet responsive styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .tablet-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+            .tablet-text-base { font-size: 1rem !important; }
+        }
+        
+        /* Large screen optimizations */
+        @media (min-width: 1025px) {
+            .desktop-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+            .desktop-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+        }
+        
+        /* Mobile table scroll indicator */
+        .table-scroll-indicator {
+            position: relative;
+        }
+        
+        .table-scroll-indicator::after {
+            content: "← Geser untuk melihat lebih banyak →";
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        @media (min-width: 768px) {
+            .table-scroll-indicator::after {
+                display: none;
+            }
+        }
+        
+        /* Touch-friendly buttons */
+        .touch-btn {
+            min-height: 44px;
+            min-width: 44px;
+            touch-action: manipulation;
+        }
+        
+        /* Small touch buttons for table actions */
+        .touch-btn-sm {
+            min-height: 36px;
+            min-width: 36px;
+            touch-action: manipulation;
+        }
+        
+        /* Extra small touch buttons for inline actions */
+        .touch-btn-xs {
+            min-height: 32px;
+            min-width: 32px;
+            touch-action: manipulation;
+        }
+        
+        /* Mobile sidebar */
+        @media (max-width: 767px) {
+            .mobile-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            
+            .mobile-sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-sidebar {
+                transform: translateX(0) !important;
+                position: relative !important;
+            }
+        }
+        
+        /* Mobile overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        
+        .mobile-overlay.show {
+            display: block;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+        }
+        .gradient-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .gradient-success {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        }
+        .gradient-warning {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        .gradient-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-active {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .table-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .table-row:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .table-row:hover {
+            background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+        }
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #4f46e5;
+            background-color: #f8fafc;
+        }
+        .upload-area.dragover {
+            border-color: #4f46e5;
+            background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md fade-in">
+            <div class="text-center mb-8">
+                <div class="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-desktop text-indigo-600 text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Management Labkom</h1>
+                <p class="text-gray-600">Yayasan Daarul Amiin IBS</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan username" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan password" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <select id="role" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="guru">Guru</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300 font-medium">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p class="font-medium mb-2">Demo Login:</p>
+                <div class="bg-gray-50 p-3 rounded-lg text-left max-h-60 overflow-y-auto">
+                    <p class="font-medium text-red-600 mb-1">Admin:</p>
+                    <p class="text-xs mb-2">admin / admin123</p>
+                    
+                    <p class="font-medium text-blue-600 mb-1">Guru (35 Guru Daarul Amiin IBS):</p>
+                    <div class="text-xs space-y-1">
+                        <p>ahmad.fauzi / fauzi2024</p>
+                        <p>siti.nurhaliza / siti2024</p>
+                        <p>maya.sari / maya2024</p>
+                        <p>andi.wijaya / andi2024</p>
+                        <p>lina.permata / lina2024</p>
+                        <p>budi.santoso / budi2024</p>
+                        <p>rina.wati / rina2024</p>
+                        <p>dedi.kurniawan / dedi2024</p>
+                        <p>fitri.handayani / fitri2024</p>
+                        <p>agus.setiawan / agus2024</p>
+                        <p>nurul.hidayah / nurul2024</p>
+                        <p>bambang.prasetyo / bambang2024</p>
+                        <p>sri.wahyuni / sri2024</p>
+                        <p>hendra.gunawan / hendra2024</p>
+                        <p>dewi.sartika / dewi2024</p>
+                        <p>rudi.hartono / rudi2024</p>
+                        <p>indah.lestari / indah2024</p>
+                        <p>fajar.ramadhan / fajar2024</p>
+                        <p>sari.melati / sari2024</p>
+                        <p>yudi.pratama / yudi2024</p>
+                        <p>wulan.dari / wulan2024</p>
+                        <p>eko.susanto / eko2024</p>
+                        <p>ratna.sari / ratna2024</p>
+                        <p>irwan.setiadi / irwan2024</p>
+                        <p>mega.putri / mega2024</p>
+                        <p>doni.saputra / doni2024</p>
+                        <p>lilis.suryani / lilis2024</p>
+                        <p>adi.nugroho / adi2024</p>
+                        <p>tina.marlina / tina2024</p>
+                        <p>joko.widodo / joko2024</p>
+                        <p>sinta.dewi / sinta2024</p>
+                        <p>rizki.ananda / rizki2024</p>
+                        <p>putri.ayu / putri2024</p>
+                        <p>bayu.aji / bayu2024</p>
+                        <p>yoga.pratama / yoga2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <!-- Header -->
+        <header class="gradient-header shadow-lg border-b">
+            <div class="flex items-center justify-between px-4 md:px-6 py-4">
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileSidebar()" class="md:hidden bg-white bg-opacity-20 text-white p-2 rounded-lg hover:bg-opacity-30 transition duration-300 backdrop-blur-sm touch-btn">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                    
+                    <div class="bg-white bg-opacity-20 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                        <i class="fas fa-desktop text-white text-lg md:text-xl"></i>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg md:text-xl font-bold text-white">Management Labkom</h1>
+                        <p class="text-xs md:text-sm text-white text-opacity-90">Yayasan Daarul Amiin IBS</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <div class="text-right mobile-hidden">
+                        <p class="text-sm font-medium text-white" id="userWelcome">Selamat datang, User</p>
+                        <p class="text-xs text-white text-opacity-80" id="userRole">Role</p>
+                    </div>
+                    <button onclick="logout()" class="bg-white bg-opacity-20 text-white px-2 md:px-4 py-2 rounded-lg hover:bg-opacity-30 transition duration-300 backdrop-blur-sm touch-btn">
+                        <i class="fas fa-sign-out-alt mr-0 md:mr-2"></i>
+                        <span class="hidden md:inline">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Overlay -->
+        <div id="mobileOverlay" class="mobile-overlay" onclick="closeMobileSidebar()"></div>
+        
+        <div class="flex">
+            <!-- Sidebar -->
+            <aside id="sidebar" class="w-64 bg-white shadow-sm min-h-screen md:block md:relative fixed top-0 left-0 z-50 mobile-sidebar">
+                <!-- Mobile Header -->
+                <div class="md:hidden flex items-center justify-between p-4 border-b bg-gradient-to-r from-indigo-500 to-purple-600">
+                    <div class="flex items-center space-x-2">
+                        <div class="bg-white bg-opacity-20 w-8 h-8 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-desktop text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-white">Management Labkom</h2>
+                            <p class="text-xs text-white text-opacity-80" id="mobileUserRole">Role</p>
+                        </div>
+                    </div>
+                    <button onclick="closeMobileSidebar()" class="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition duration-300 touch-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <nav class="p-4 space-y-2">
+                    <button onclick="showSection('dashboardSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 sidebar-active touch-btn">
+                        <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                    </button>
+                    <button onclick="showSection('infoSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-info-circle mr-3"></i>Informasi Labkom
+                    </button>
+                    <button onclick="showSection('bookingSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-calendar-plus mr-3"></i>Form Booking
+                    </button>
+                    <button onclick="showSection('listSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-list mr-3"></i>Daftar Booking
+                    </button>
+                    <button onclick="showSection('rulesSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-clipboard-list mr-3"></i>Tata Tertib
+                    </button>
+                    <button onclick="showSection('gallerySection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-images mr-3"></i>Galeri
+                    </button>
+                    <button onclick="showSection('contactSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 touch-btn">
+                        <i class="fas fa-phone mr-3"></i>Kontak Admin
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 md:p-6">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="content-section fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+                        <div class="gradient-info text-white p-4 md:p-6 rounded-xl shadow-lg card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs md:text-sm text-white text-opacity-90">Total Booking Hari Ini</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-white" id="todayBookings">0</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 p-2 md:p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fas fa-calendar-day text-white text-lg md:text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gradient-success text-white p-4 md:p-6 rounded-xl shadow-lg card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs md:text-sm text-white text-opacity-90">Slot Tersedia</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-white" id="availableSlots">6</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 p-2 md:p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fas fa-check-circle text-white text-lg md:text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gradient-warning text-white p-4 md:p-6 rounded-xl shadow-lg card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs md:text-sm text-white text-opacity-90">Slot Terpakai</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-white" id="usedSlots">0</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 p-2 md:p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fas fa-clock text-white text-lg md:text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gradient-card text-white p-4 md:p-6 rounded-xl shadow-lg card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs md:text-sm text-white text-opacity-90">Total Komputer</p>
+                                    <p class="text-2xl md:text-3xl font-bold text-white">30</p>
+                                </div>
+                                <div class="bg-white bg-opacity-20 p-2 md:p-3 rounded-lg backdrop-blur-sm">
+                                    <i class="fas fa-desktop text-white text-lg md:text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Jadwal Hari Ini</h3>
+                        <div id="todaySchedule" class="space-y-3">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-100 p-2 rounded-lg">
+                                        <i class="fas fa-clock text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">07:00 - 08:30</p>
+                                        <p class="text-sm text-gray-600">Tersedia</p>
+                                    </div>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Kosong</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informasi Labkom Section -->
+                <div id="infoSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Informasi Laboratorium Komputer</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-lg p-6 border border-blue-200">
+                            <h3 class="text-lg font-semibold text-indigo-800 mb-4">
+                                <i class="fas fa-info-circle text-indigo-600 mr-2"></i>Informasi Umum
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <span class="text-indigo-700 font-medium">Kapasitas:</span>
+                                    <span class="font-bold text-indigo-900 bg-indigo-200 px-3 py-1 rounded-full">30 Komputer</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <span class="text-indigo-700 font-medium">Jam Operasional:</span>
+                                    <span class="font-bold text-indigo-900 bg-indigo-200 px-3 py-1 rounded-full">07:30 - 20:30</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <span class="text-indigo-700 font-medium">Durasi per Sesi:</span>
+                                    <span class="font-bold text-indigo-900 bg-indigo-200 px-3 py-1 rounded-full">80 Menit</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <span class="text-indigo-700 font-medium">Lokasi:</span>
+                                    <span class="font-bold text-indigo-900 bg-indigo-200 px-3 py-1 rounded-full">Gedung A Lantai 2</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-lg p-6 border border-green-200">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">
+                                <i class="fas fa-tools text-green-600 mr-2"></i>Fasilitas
+                            </h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-snowflake text-cyan-600"></i>
+                                    <span class="text-sm font-medium text-green-800">AC</span>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-video text-purple-600"></i>
+                                    <span class="text-sm font-medium text-green-800">Proyektor</span>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-wifi text-blue-600"></i>
+                                    <span class="text-sm font-medium text-green-800">WiFi</span>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-print text-orange-600"></i>
+                                    <span class="text-sm font-medium text-green-800">Printer</span>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-chalkboard text-yellow-600"></i>
+                                    <span class="text-sm font-medium text-green-800">Whiteboard</span>
+                                </div>
+                                <div class="flex items-center space-x-2 bg-white bg-opacity-60 p-3 rounded-lg">
+                                    <i class="fas fa-volume-up text-red-600"></i>
+                                    <span class="text-sm font-medium text-green-800">Sound System</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-orange-50 to-red-100 rounded-xl shadow-lg p-6 mt-6 border border-orange-200">
+                        <h3 class="text-lg font-semibold text-orange-800 mb-4">
+                            <i class="fas fa-desktop text-orange-600 mr-2"></i>Status Komputer
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-gradient-to-r from-green-400 to-green-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-check-circle text-2xl mr-2"></i>
+                                    <span class="text-2xl font-bold" id="activeComputers">26</span>
+                                </div>
+                                <p class="text-sm text-green-100">Komputer Aktif</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-tools text-2xl mr-2"></i>
+                                    <span class="text-2xl font-bold" id="repairComputers">2</span>
+                                </div>
+                                <p class="text-sm text-yellow-100">Dalam Perbaikan</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-red-400 to-red-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <div class="flex items-center justify-center mb-2">
+                                    <i class="fas fa-exclamation-triangle text-2xl mr-2"></i>
+                                    <span class="text-2xl font-bold" id="brokenComputers">2</span>
+                                </div>
+                                <p class="text-sm text-red-100">Komputer Rusak</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-60 p-4 rounded-lg">
+                            <h4 class="font-semibold text-orange-800 mb-3">Detail Status Komputer:</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium text-yellow-700 mb-2">
+                                        <i class="fas fa-tools text-yellow-600 mr-1"></i>Dalam Perbaikan:
+                                    </h5>
+                                    <ul id="repairComputersList" class="text-sm text-gray-700 space-y-1">
+                                        <li>• PC-15: Masalah keyboard</li>
+                                        <li>• PC-23: Update software</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium text-red-700 mb-2">
+                                        <i class="fas fa-exclamation-triangle text-red-600 mr-1"></i>Rusak:
+                                    </h5>
+                                    <ul id="brokenComputersList" class="text-sm text-gray-700 space-y-1">
+                                        <li>• PC-08: Motherboard rusak</li>
+                                        <li>• PC-19: Monitor tidak menyala</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl shadow-lg p-6 mt-6 border border-purple-200">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-4">
+                            <i class="fas fa-clock text-purple-600 mr-2"></i>Jadwal Slot Waktu
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-r from-red-400 to-red-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 1</p>
+                                <p class="text-sm text-red-100">07:30 - 08:50</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 2</p>
+                                <p class="text-sm text-orange-100">08:50 - 10:10</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 3</p>
+                                <p class="text-sm text-yellow-100">10:30 - 11:50</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-400 to-green-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 4</p>
+                                <p class="text-sm text-green-100">13:00 - 14:30</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-400 to-blue-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 5</p>
+                                <p class="text-sm text-blue-100">16:00 - 17:30</p>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-400 to-purple-500 text-white p-4 rounded-lg text-center shadow-md hover:shadow-lg transition-all duration-300">
+                                <p class="font-bold text-white">Slot 6</p>
+                                <p class="text-sm text-purple-100">19:00 - 20:30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Booking Section -->
+                <div id="bookingSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Form Booking Laboratorium</h2>
+                    
+                    <div class="bg-gradient-to-br from-cyan-50 to-blue-100 rounded-xl shadow-lg p-6 border border-cyan-200">
+                        <form id="bookingForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
+                                    <input type="text" id="teacherName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent touch-btn" placeholder="Masukkan nama guru" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                                    <input type="text" id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan mata pelajaran" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                                    <select id="className" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                        <option value="">Pilih Kelas</option>
+                                        <option value="VII A">VII A</option>
+                                        <option value="VII B">VII B</option>
+                                        <option value="VII C">VII C</option>
+                                        <option value="VIII A">VIII A</option>
+                                        <option value="VIII B">VIII B</option>
+                                        <option value="VIII C">VIII C</option>
+                                        <option value="IX A">IX A</option>
+                                        <option value="IX B">IX B</option>
+                                        <option value="IX C">IX C</option>
+                                        <option value="X IPA">X IPA</option>
+                                        <option value="X IPS">X IPS</option>
+                                        <option value="XI IPA">XI IPA</option>
+                                        <option value="XI IPS">XI IPS</option>
+                                        <option value="XII IPA">XII IPA</option>
+                                        <option value="XII IPS">XII IPS</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Siswa</label>
+                                    <input type="number" id="studentCount" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan jumlah siswa" min="1" max="30" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                                    <input type="date" id="bookingDate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Slot Waktu</label>
+                                    <select id="timeSlot" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                        <option value="">Pilih Slot Waktu</option>
+                                        <option value="07:30-08:50">Slot 1 (07:30 - 08:50)</option>
+                                        <option value="08:50-10:10">Slot 2 (08:50 - 10:10)</option>
+                                        <option value="10:30-11:50">Slot 3 (10:30 - 11:50)</option>
+                                        <option value="13:00-14:30">Slot 4 (13:00 - 14:30)</option>
+                                        <option value="16:00-17:30">Slot 5 (16:00 - 17:30)</option>
+                                        <option value="19:00-20:30">Slot 6 (19:00 - 20:30)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan/Materi</label>
+                                <textarea id="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan keterangan atau materi yang akan diajarkan"></textarea>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                                <button type="button" onclick="resetForm()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300 touch-btn">
+                                    Reset
+                                </button>
+                                <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                    <i class="fas fa-save mr-2"></i>Booking Sekarang
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Daftar Booking Section -->
+                <div id="listSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Daftar Booking Laboratorium</h2>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+                            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+                                <input type="date" id="filterDate" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent touch-btn">
+                                <div class="flex space-x-2">
+                                    <button onclick="filterBookings()" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                        <i class="fas fa-filter mr-2"></i>Filter
+                                    </button>
+                                    <button onclick="clearFilter()" class="flex-1 sm:flex-none px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 touch-btn">
+                                        <i class="fas fa-times mr-2"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="adminBookingActions" class="hidden w-full md:w-auto">
+                                <button onclick="showAddBookingModal()" class="w-full md:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 touch-btn">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Booking
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Card View -->
+                        <div class="block md:hidden space-y-4">
+                            <div id="bookingCardsList">
+                                <!-- Mobile cards will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Desktop Table View -->
+                        <div class="hidden md:block overflow-x-auto rounded-xl">
+                            <table class="w-full rounded-xl overflow-hidden shadow-lg">
+                                <thead>
+                                    <tr class="table-header text-white">
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">No</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Tanggal</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Waktu</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Guru</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Kelas</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Mata Pelajaran</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Jumlah Siswa</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Status</th>
+                                        <th class="text-left py-4 px-6 font-semibold text-sm">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingList" class="bg-white">
+                                    <tr>
+                                        <td colspan="9" class="text-center py-12 text-gray-500">
+                                            <div class="flex flex-col items-center">
+                                                <i class="fas fa-calendar-times text-6xl mb-4 text-gray-300"></i>
+                                                <p class="text-lg font-medium">Belum ada booking yang tersedia</p>
+                                                <p class="text-sm text-gray-400 mt-2">Silakan buat booking baru melalui form booking</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jadwal Semua Guru Section -->
+                <div id="scheduleSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Jadwal Booking Semua Guru</h2>
+                    
+                    <div class="bg-gradient-to-br from-indigo-50 to-purple-100 rounded-xl shadow-lg p-6 border border-indigo-200 mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-indigo-800">
+                                <i class="fas fa-info-circle text-indigo-600 mr-2"></i>Informasi
+                            </h3>
+                        </div>
+                        <p class="text-indigo-700 bg-white bg-opacity-60 p-3 rounded-lg">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            Lihat jadwal booking semua guru untuk menghindari bentrok waktu. Slot yang sudah terpakai akan ditampilkan dengan warna merah.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+                            <h3 class="text-lg font-semibold text-gray-800">Filter Jadwal</h3>
+                            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+                                <input type="date" id="scheduleFilterDate" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent touch-btn">
+                                <div class="flex space-x-2">
+                                    <button onclick="filterSchedule()" class="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                        <i class="fas fa-search mr-2"></i><span class="hidden sm:inline">Cari Jadwal</span><span class="sm:hidden">Cari</span>
+                                    </button>
+                                    <button onclick="showAllSchedule()" class="flex-1 sm:flex-none px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 touch-btn">
+                                        <i class="fas fa-list mr-2"></i><span class="hidden sm:inline">Tampilkan Semua</span><span class="sm:hidden">Semua</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Schedule View -->
+                        <div class="block md:hidden space-y-4">
+                            <div id="scheduleCardsList">
+                                <!-- Mobile schedule cards will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Desktop Schedule Table -->
+                        <div class="hidden md:block overflow-x-auto rounded-xl">
+                            <table class="w-full rounded-xl overflow-hidden shadow-lg">
+                                <thead>
+                                    <tr class="table-header text-white">
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">Tanggal</th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 1<br><span class="text-xs font-normal">07:30-08:50</span>
+                                        </th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 2<br><span class="text-xs font-normal">08:50-10:10</span>
+                                        </th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 3<br><span class="text-xs font-normal">10:30-11:50</span>
+                                        </th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 4<br><span class="text-xs font-normal">13:00-14:30</span>
+                                        </th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 5<br><span class="text-xs font-normal">16:00-17:30</span>
+                                        </th>
+                                        <th class="text-left py-4 px-4 font-semibold text-sm">
+                                            Slot 6<br><span class="text-xs font-normal">19:00-20:30</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scheduleTable" class="bg-white">
+                                    <tr>
+                                        <td colspan="7" class="text-center py-12 text-gray-500">
+                                            <div class="flex flex-col items-center">
+                                                <i class="fas fa-calendar-alt text-6xl mb-4 text-gray-300"></i>
+                                                <p class="text-lg font-medium">Pilih tanggal untuk melihat jadwal</p>
+                                                <p class="text-sm text-gray-400 mt-2">Atau klik "Tampilkan Semua" untuk melihat semua jadwal</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center space-x-2 bg-green-50 p-3 rounded-lg">
+                                <div class="w-4 h-4 bg-green-500 rounded"></div>
+                                <span class="text-sm text-green-700 font-medium">Slot Tersedia</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-red-50 p-3 rounded-lg">
+                                <div class="w-4 h-4 bg-red-500 rounded"></div>
+                                <span class="text-sm text-red-700 font-medium">Slot Terpakai</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
+                                <div class="w-4 h-4 bg-gray-400 rounded"></div>
+                                <span class="text-sm text-gray-700 font-medium">Hari Libur/Lewat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tata Tertib Section -->
+                <div id="rulesSection" class="content-section hidden fade-in">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Tata Tertib Laboratorium Komputer</h2>
+                        <div id="adminRulesActions" class="hidden space-x-2">
+                            <button onclick="showAddRuleModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300">
+                                <i class="fas fa-plus mr-2"></i>Tambah Aturan
+                            </button>
+                            <button onclick="toggleEditMode()" id="editRulesBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+                                <i class="fas fa-edit mr-2"></i>Edit Mode
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-orange-100 rounded-xl shadow-lg p-6 border border-yellow-200">
+                        <div class="space-y-6">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-100 p-6 rounded-xl border border-blue-200">
+                                <h3 class="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+                                    <i class="fas fa-user-check text-blue-600 mr-2"></i>Untuk Guru
+                                </h3>
+                                <ul id="teacherRules" class="space-y-2">
+                                    <!-- Rules will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-100 p-6 rounded-xl border border-green-200">
+                                <h3 class="text-lg font-semibold text-green-800 mb-4 flex items-center">
+                                    <i class="fas fa-users text-green-600 mr-2"></i>Untuk Siswa
+                                </h3>
+                                <ul id="studentRules" class="space-y-2">
+                                    <!-- Rules will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-red-50 to-pink-100 p-6 rounded-xl border border-red-200">
+                                <h3 class="text-lg font-semibold text-red-800 mb-4 flex items-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>Larangan
+                                </h3>
+                                <ul id="prohibitionRules" class="space-y-2">
+                                    <!-- Rules will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Rule Modal -->
+                <div id="addRuleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-xl p-4 md:p-6 w-full max-w-md">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Tambah Aturan Baru</h3>
+                            <button onclick="closeAddRuleModal()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="addRuleForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                                <select id="ruleCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required>
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="teacher">Untuk Guru</option>
+                                    <option value="student">Untuk Siswa</option>
+                                    <option value="prohibition">Larangan</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Aturan</label>
+                                <textarea id="ruleText" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Masukkan aturan baru..." required></textarea>
+                            </div>
+                            
+                            <div class="flex space-x-3">
+                                <button type="button" onclick="closeAddRuleModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
+                                    Batal
+                                </button>
+                                <button type="submit" class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
+                                    <i class="fas fa-save mr-2"></i>Tambah
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Galeri Section -->
+                <div id="gallerySection" class="content-section hidden fade-in">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Galeri Laboratorium Komputer</h2>
+                        <button onclick="showUploadModal()" class="gradient-info text-white px-4 py-2 rounded-lg hover:opacity-90 transition duration-300" id="uploadBtn">
+                            <i class="fas fa-plus mr-2"></i>Upload Foto
+                        </button>
+                    </div>
+
+                    <!-- Upload Modal -->
+                    <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+                        <div class="bg-white rounded-xl p-4 md:p-6 w-full max-w-md">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Upload Foto Kegiatan</h3>
+                                <button onclick="closeUploadModal()" class="text-gray-500 hover:text-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <form id="uploadForm" class="space-y-4">
+                                <div class="upload-area p-8 rounded-lg text-center cursor-pointer" onclick="document.getElementById('photoInput').click()">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                    <p class="text-gray-600">Klik untuk pilih foto atau drag & drop</p>
+                                    <p class="text-sm text-gray-400 mt-1">JPG, PNG, GIF (Max 5MB)</p>
+                                    <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="previewImage(this)">
+                                </div>
+                                
+                                <div id="imagePreview" class="hidden">
+                                    <img id="previewImg" class="w-full h-48 object-cover rounded-lg">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Foto</label>
+                                    <input type="text" id="photoTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan judul foto" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                                    <textarea id="photoDescription" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Deskripsi kegiatan..."></textarea>
+                                </div>
+                                
+                                <div class="flex space-x-3">
+                                    <button type="button" onclick="closeUploadModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
+                                        Batal
+                                    </button>
+                                    <button type="submit" class="flex-1 gradient-info text-white px-4 py-2 rounded-lg hover:opacity-90 transition duration-300">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="galleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-blue-400 to-blue-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-desktop text-4xl mb-2"></i>
+                                    <p class="text-sm">Ruang Utama Laboratorium</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">Ruang Utama</h3>
+                                <p class="text-sm text-gray-600">Ruang utama dengan 30 unit komputer</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-green-400 to-green-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-chalkboard-teacher text-4xl mb-2"></i>
+                                    <p class="text-sm">Area Presentasi</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">Area Presentasi</h3>
+                                <p class="text-sm text-gray-600">Dilengkapi proyektor dan sound system</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-purple-400 to-purple-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-print text-4xl mb-2"></i>
+                                    <p class="text-sm">Area Printer</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">Area Printer</h3>
+                                <p class="text-sm text-gray-600">Printer untuk keperluan pembelajaran</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-orange-400 to-orange-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-wifi text-4xl mb-2"></i>
+                                    <p class="text-sm">Koneksi Internet</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">Koneksi WiFi</h3>
+                                <p class="text-sm text-gray-600">Internet berkecepatan tinggi</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-red-400 to-red-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-snowflake text-4xl mb-2"></i>
+                                    <p class="text-sm">Sistem AC</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">AC Central</h3>
+                                <p class="text-sm text-gray-600">Ruangan ber-AC untuk kenyamanan</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                            <div class="bg-gradient-to-br from-teal-400 to-teal-600 h-48 flex items-center justify-center">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-users text-4xl mb-2"></i>
+                                    <p class="text-sm">Suasana Belajar</p>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800">Suasana Belajar</h3>
+                                <p class="text-sm text-gray-600">Lingkungan belajar yang kondusif</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <span class="text-xs text-gray-400">Admin</span>
+                                    <span class="text-xs text-gray-400">Default</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kontak Section -->
+                <div id="contactSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Kontak Admin Laboratorium</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-br from-teal-50 to-cyan-100 rounded-xl shadow-lg p-6 border border-teal-200">
+                            <h3 class="text-lg font-semibold text-teal-800 mb-4">
+                                <i class="fas fa-user-tie text-teal-600 mr-2"></i>Admin Laboratorium
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3 bg-white bg-opacity-60 p-4 rounded-lg">
+                                    <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 p-3 rounded-lg shadow-md">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-teal-600 font-medium">Nama</p>
+                                        <p class="font-bold text-teal-800">Ahmad Fauzi, S.Kom</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3 bg-white bg-opacity-60 p-4 rounded-lg">
+                                    <div class="bg-gradient-to-r from-green-400 to-green-500 p-3 rounded-lg shadow-md">
+                                        <i class="fas fa-phone text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-teal-600 font-medium">Telepon</p>
+                                        <p class="font-bold text-teal-800">+62 812-3456-7890</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3 bg-white bg-opacity-60 p-4 rounded-lg">
+                                    <div class="bg-gradient-to-r from-blue-400 to-blue-500 p-3 rounded-lg shadow-md">
+                                        <i class="fas fa-envelope text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-teal-600 font-medium">Email</p>
+                                        <p class="font-bold text-teal-800">admin.labkom@daarulamiin.sch.id</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3 bg-white bg-opacity-60 p-4 rounded-lg">
+                                    <div class="bg-gradient-to-r from-purple-400 to-purple-500 p-3 rounded-lg shadow-md">
+                                        <i class="fas fa-clock text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-teal-600 font-medium">Jam Kerja</p>
+                                        <p class="font-bold text-teal-800">Senin - Jumat: 07:00 - 16:00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl shadow-lg p-6 border border-purple-200">
+                            <h3 class="text-lg font-semibold text-purple-800 mb-4">
+                                <i class="fas fa-paper-plane text-purple-600 mr-2"></i>Kirim Pesan
+                            </h3>
+                            
+                            <form id="contactForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
+                                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan nama Anda" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan email Anda" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
+                                    <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Tulis pesan Anda..." required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300">
+                                    <i class="fas fa-paper-plane mr-2"></i>Kirim Pesan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kelola User Section (Admin Only) -->
+                <div id="manageUsersSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Kelola User</h2>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Tambah User Baru</h3>
+                        </div>
+                        
+                        <form id="addUserForm" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" id="newUsername" placeholder="Username (contoh: john.doe)" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn" required>
+                                <input type="text" id="newFullName" placeholder="Nama Lengkap (contoh: John Doe, S.Pd)" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <input type="password" id="newPassword" placeholder="Password" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn" required>
+                                <select id="newRole" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                                    <option value="guru">Guru</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                    <i class="fas fa-plus mr-2"></i>Tambah User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Daftar User</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="table-header text-white">
+                                        <th class="text-left py-3 px-4">Username</th>
+                                        <th class="text-left py-3 px-4">Role</th>
+                                        <th class="text-left py-3 px-4">Status</th>
+                                        <th class="text-left py-3 px-4">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersList">
+                                    <!-- Users will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kelola Komputer Section (Admin Only) -->
+                <div id="manageComputersSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Kelola Data Komputer</h2>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Tambah Komputer Baru</h3>
+                        </div>
+                        
+                        <form id="addComputerForm" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <input type="text" id="computerName" placeholder="Nama Komputer (contoh: PC-01)" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn" required>
+                                <select id="computerStatus" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Perbaikan">Dalam Perbaikan</option>
+                                    <option value="Rusak">Rusak</option>
+                                </select>
+                                <input type="text" id="computerSpecs" placeholder="Spesifikasi (contoh: Intel i5, 8GB RAM)" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <textarea id="computerNotes" placeholder="Catatan tambahan..." rows="2" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn"></textarea>
+                                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Komputer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Daftar Komputer</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="table-header text-white">
+                                        <th class="text-left py-3 px-4">Nama</th>
+                                        <th class="text-left py-3 px-4">Status</th>
+                                        <th class="text-left py-3 px-4">Spesifikasi</th>
+                                        <th class="text-left py-3 px-4">Catatan</th>
+                                        <th class="text-left py-3 px-4">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="computersList">
+                                    <!-- Computers will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laporan Section (Admin Only) -->
+                <div id="reportsSection" class="content-section hidden fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Laporan Penggunaan Laboratorium</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-lg p-6 border border-blue-200">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-4">
+                                <i class="fas fa-calendar-week text-blue-600 mr-2"></i>Minggu Ini
+                            </h3>
+                            <div class="text-3xl font-bold text-blue-900" id="weeklyBookings">0</div>
+                            <p class="text-sm text-blue-600 mt-2">Total booking minggu ini</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-lg p-6 border border-green-200">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">
+                                <i class="fas fa-calendar-alt text-green-600 mr-2"></i>Bulan Ini
+                            </h3>
+                            <div class="text-3xl font-bold text-green-900" id="monthlyBookings">0</div>
+                            <p class="text-sm text-green-600 mt-2">Total booking bulan ini</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl shadow-lg p-6 border border-purple-200">
+                            <h3 class="text-lg font-semibold text-purple-800 mb-4">
+                                <i class="fas fa-percentage text-purple-600 mr-2"></i>Tingkat Penggunaan
+                            </h3>
+                            <div class="text-3xl font-bold text-purple-900" id="usageRate">0%</div>
+                            <p class="text-sm text-purple-600 mt-2">Rata-rata penggunaan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Filter Laporan</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <input type="date" id="reportStartDate" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                            <input type="date" id="reportEndDate" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                            <select id="reportTeacher" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 touch-btn">
+                                <option value="">Semua Guru</option>
+                            </select>
+                            <button onclick="generateReport()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 touch-btn">
+                                <i class="fas fa-chart-bar mr-2"></i><span class="hidden sm:inline">Generate Laporan</span><span class="sm:hidden">Generate</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Statistik Penggunaan per Guru</h3>
+                        <div id="teacherStats" class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">Belum ada data statistik</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Booking Modal (Admin Only) -->
+    <div id="addBookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-4 md:p-6 w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Tambah Booking Baru</h3>
+                <button onclick="closeAddBookingModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addBookingFormModal" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
+                        <input type="text" id="addTeacherName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan nama guru" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                        <input type="text" id="addSubject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan mata pelajaran" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                        <select id="addClassName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                            <option value="">Pilih Kelas</option>
+                            <option value="VII A">VII A</option>
+                            <option value="VII B">VII B</option>
+                            <option value="VII C">VII C</option>
+                            <option value="VIII A">VIII A</option>
+                            <option value="VIII B">VIII B</option>
+                            <option value="VIII C">VIII C</option>
+                            <option value="IX A">IX A</option>
+                            <option value="IX B">IX B</option>
+                            <option value="IX C">IX C</option>
+                            <option value="X IPA">X IPA</option>
+                            <option value="X IPS">X IPS</option>
+                            <option value="XI IPA">XI IPA</option>
+                            <option value="XI IPS">XI IPS</option>
+                            <option value="XII IPA">XII IPA</option>
+                            <option value="XII IPS">XII IPS</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Siswa</label>
+                        <input type="number" id="addStudentCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan jumlah siswa" min="1" max="30" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                        <input type="date" id="addBookingDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Slot Waktu</label>
+                        <select id="addTimeSlot" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                            <option value="">Pilih Slot Waktu</option>
+                            <option value="07:30-08:50">Slot 1 (07:30 - 08:50)</option>
+                            <option value="08:50-10:10">Slot 2 (08:50 - 10:10)</option>
+                            <option value="10:30-11:50">Slot 3 (10:30 - 11:50)</option>
+                            <option value="13:00-14:30">Slot 4 (13:00 - 14:30)</option>
+                            <option value="16:00-17:30">Slot 5 (16:00 - 17:30)</option>
+                            <option value="19:00-20:30">Slot 6 (19:00 - 20:30)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan/Materi</label>
+                    <textarea id="addDescription" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan keterangan atau materi yang akan diajarkan"></textarea>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeAddBookingModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
+                        <i class="fas fa-save mr-2"></i>Tambah Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Booking Modal (Admin Only) -->
+    <div id="editBookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-4 md:p-6 w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Edit Booking</h3>
+                <button onclick="closeEditBookingModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editBookingForm" class="space-y-4">
+                <input type="hidden" id="editBookingId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Guru</label>
+                        <input type="text" id="editTeacherName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan nama guru" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                        <input type="text" id="editSubject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan mata pelajaran" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                        <select id="editClassName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                            <option value="">Pilih Kelas</option>
+                            <option value="VII A">VII A</option>
+                            <option value="VII B">VII B</option>
+                            <option value="VII C">VII C</option>
+                            <option value="VIII A">VIII A</option>
+                            <option value="VIII B">VIII B</option>
+                            <option value="VIII C">VIII C</option>
+                            <option value="IX A">IX A</option>
+                            <option value="IX B">IX B</option>
+                            <option value="IX C">IX C</option>
+                            <option value="X IPA">X IPA</option>
+                            <option value="X IPS">X IPS</option>
+                            <option value="XI IPA">XI IPA</option>
+                            <option value="XI IPS">XI IPS</option>
+                            <option value="XII IPA">XII IPA</option>
+                            <option value="XII IPS">XII IPS</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Siswa</label>
+                        <input type="number" id="editStudentCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan jumlah siswa" min="1" max="30" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                        <input type="date" id="editBookingDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Slot Waktu</label>
+                        <select id="editTimeSlot" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                            <option value="">Pilih Slot Waktu</option>
+                            <option value="07:30-08:50">Slot 1 (07:30 - 08:50)</option>
+                            <option value="08:50-10:10">Slot 2 (08:50 - 10:10)</option>
+                            <option value="10:30-11:50">Slot 3 (10:30 - 11:50)</option>
+                            <option value="13:00-14:30">Slot 4 (13:00 - 14:30)</option>
+                            <option value="16:00-17:30">Slot 5 (16:00 - 17:30)</option>
+                            <option value="19:00-20:30">Slot 6 (19:00 - 20:30)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan/Materi</label>
+                    <textarea id="editDescription" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Masukkan keterangan atau materi yang akan diajarkan"></textarea>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeEditBookingModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-300">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
+                        <i class="fas fa-save mr-2"></i>Update Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data storage with localStorage persistence
+        let bookings = JSON.parse(localStorage.getItem('labkom_bookings')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('labkom_currentUser')) || null;
+        let galleryPhotos = JSON.parse(localStorage.getItem('labkom_gallery')) || [];
+        let computers = JSON.parse(localStorage.getItem('labkom_computers')) || [];
+        let rules = JSON.parse(localStorage.getItem('labkom_rules')) || [];
+        let editMode = false;
+        
+        // Time slots
+        const timeSlots = [
+            '07:30-08:50',
+            '08:50-10:10', 
+            '10:30-11:50',
+            '13:00-14:30',
+            '16:00-17:30',
+            '19:00-20:30'
+        ];
+
+        // Initialize users data
+        let users = JSON.parse(localStorage.getItem('labkom_users')) || [];
+
+        // Initialize default users if empty
+        function initializeUsers() {
+            if (users.length === 0) {
+                users = [
+                    { username: 'admin', password: 'admin123', role: 'admin', fullName: 'Administrator' },
+                    { username: 'ahmad.fauzi', password: 'fauzi2024', role: 'guru', fullName: 'Ahmad Fauzi, S.Pd' },
+                    { username: 'siti.nurhaliza', password: 'siti2024', role: 'guru', fullName: 'Siti Nurhaliza, S.Pd' },
+                    { username: 'maya.sari', password: 'maya2024', role: 'guru', fullName: 'Maya Sari, S.Pd' },
+                    { username: 'andi.wijaya', password: 'andi2024', role: 'guru', fullName: 'Andi Wijaya, S.Pd' },
+                    { username: 'lina.permata', password: 'lina2024', role: 'guru', fullName: 'Lina Permata, S.Pd' },
+                    { username: 'budi.santoso', password: 'budi2024', role: 'guru', fullName: 'Budi Santoso, S.Pd' },
+                    { username: 'rina.wati', password: 'rina2024', role: 'guru', fullName: 'Rina Wati, S.Pd' },
+                    { username: 'dedi.kurniawan', password: 'dedi2024', role: 'guru', fullName: 'Dedi Kurniawan, S.Pd' },
+                    { username: 'fitri.handayani', password: 'fitri2024', role: 'guru', fullName: 'Fitri Handayani, S.Pd' },
+                    { username: 'agus.setiawan', password: 'agus2024', role: 'guru', fullName: 'Agus Setiawan, S.Pd' },
+                    { username: 'nurul.hidayah', password: 'nurul2024', role: 'guru', fullName: 'Nurul Hidayah, S.Pd' },
+                    { username: 'bambang.prasetyo', password: 'bambang2024', role: 'guru', fullName: 'Bambang Prasetyo, S.Pd' },
+                    { username: 'sri.wahyuni', password: 'sri2024', role: 'guru', fullName: 'Sri Wahyuni, S.Pd' },
+                    { username: 'hendra.gunawan', password: 'hendra2024', role: 'guru', fullName: 'Hendra Gunawan, S.Pd' },
+                    { username: 'dewi.sartika', password: 'dewi2024', role: 'guru', fullName: 'Dewi Sartika, S.Pd' },
+                    { username: 'rudi.hartono', password: 'rudi2024', role: 'guru', fullName: 'Rudi Hartono, S.Pd' },
+                    { username: 'indah.lestari', password: 'indah2024', role: 'guru', fullName: 'Indah Lestari, S.Pd' },
+                    { username: 'fajar.ramadhan', password: 'fajar2024', role: 'guru', fullName: 'Fajar Ramadhan, S.Pd' },
+                    { username: 'sari.melati', password: 'sari2024', role: 'guru', fullName: 'Sari Melati, S.Pd' },
+                    { username: 'yudi.pratama', password: 'yudi2024', role: 'guru', fullName: 'Yudi Pratama, S.Pd' },
+                    { username: 'wulan.dari', password: 'wulan2024', role: 'guru', fullName: 'Wulan Dari, S.Pd' },
+                    { username: 'eko.susanto', password: 'eko2024', role: 'guru', fullName: 'Eko Susanto, S.Pd' },
+                    { username: 'ratna.sari', password: 'ratna2024', role: 'guru', fullName: 'Ratna Sari, S.Pd' },
+                    { username: 'irwan.setiadi', password: 'irwan2024', role: 'guru', fullName: 'Irwan Setiadi, S.Pd' },
+                    { username: 'mega.putri', password: 'mega2024', role: 'guru', fullName: 'Mega Putri, S.Pd' },
+                    { username: 'doni.saputra', password: 'doni2024', role: 'guru', fullName: 'Doni Saputra, S.Pd' },
+                    { username: 'lilis.suryani', password: 'lilis2024', role: 'guru', fullName: 'Lilis Suryani, S.Pd' },
+                    { username: 'adi.nugroho', password: 'adi2024', role: 'guru', fullName: 'Adi Nugroho, S.Pd' },
+                    { username: 'tina.marlina', password: 'tina2024', role: 'guru', fullName: 'Tina Marlina, S.Pd' },
+                    { username: 'joko.widodo', password: 'joko2024', role: 'guru', fullName: 'Joko Widodo, S.Pd' },
+                    { username: 'sinta.dewi', password: 'sinta2024', role: 'guru', fullName: 'Sinta Dewi, S.Pd' },
+                    { username: 'rizki.ananda', password: 'rizki2024', role: 'guru', fullName: 'Rizki Ananda, S.Pd' },
+                    { username: 'putri.ayu', password: 'putri2024', role: 'guru', fullName: 'Putri Ayu, S.Pd' },
+                    { username: 'bayu.aji', password: 'bayu2024', role: 'guru', fullName: 'Bayu Aji, S.Pd' },
+                    { username: 'yoga.pratama', password: 'yoga2024', role: 'guru', fullName: 'Yoga Pratama, S.Pd' }
+                ];
+                localStorage.setItem('labkom_users', JSON.stringify(users));
+            }
+        }
+
+        // Initialize users on page load
+        initializeUsers();
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            
+            // Authentication with user list
+            const user = users.find(u => u.username === username && u.password === password && u.role === role);
+            
+            if (user) {
+                currentUser = {
+                    username: username,
+                    role: role,
+                    name: user.fullName || (username === 'admin' ? 'Administrator' : 'Guru ' + username)
+                };
+                
+                // Save user session to localStorage
+                localStorage.setItem('labkom_currentUser', JSON.stringify(currentUser));
+                
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                
+                document.getElementById('userWelcome').textContent = `Selamat datang, ${currentUser.name}`;
+                document.getElementById('userRole').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+                
+                // Update mobile user role
+                const mobileUserRole = document.getElementById('mobileUserRole');
+                if (mobileUserRole) {
+                    mobileUserRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+                }
+                
+                // Setup role-based access
+                setupRoleBasedAccess();
+                updateDashboard();
+                initializeDefaultData();
+                
+                // Update additional components for admin
+                if (currentUser.role === 'admin') {
+                    updateUsersList();
+                    updateTeacherDropdown();
+                    updateReportStatistics(bookings);
+                }
+            } else {
+                alert('Username atau password salah!');
+            }
+        });
+
+        // Setup role-based access control
+        function setupRoleBasedAccess() {
+            const sidebar = document.querySelector('nav');
+            
+            if (currentUser.role === 'guru') {
+                // Guru hanya bisa akses: Dashboard, Info Labkom, Form Booking, Daftar Booking (read-only), Tata Tertib
+                sidebar.innerHTML = `
+                    <div class="p-4 space-y-2">
+                        <button onclick="showSection('dashboardSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 sidebar-active">
+                            <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                        </button>
+                        <button onclick="showSection('infoSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-info-circle mr-3"></i>Informasi Labkom
+                        </button>
+                        <button onclick="showSection('bookingSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-calendar-plus mr-3"></i>Form Booking
+                        </button>
+                        <button onclick="showSection('listSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-list mr-3"></i>Booking Saya
+                        </button>
+                        <button onclick="showSection('scheduleSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-calendar-check mr-3"></i>Jadwal Semua Guru
+                        </button>
+                        <button onclick="showSection('rulesSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-clipboard-list mr-3"></i>Tata Tertib
+                        </button>
+                        <button onclick="showSection('gallerySection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-images mr-3"></i>Galeri
+                        </button>
+                    </div>
+                `;
+            } else if (currentUser.role === 'admin') {
+                // Admin bisa akses semua fitur
+                sidebar.innerHTML = `
+                    <div class="p-4 space-y-2">
+                        <button onclick="showSection('dashboardSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300 sidebar-active">
+                            <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
+                        </button>
+                        <button onclick="showSection('infoSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-info-circle mr-3"></i>Informasi Labkom
+                        </button>
+                        <button onclick="showSection('bookingSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-calendar-plus mr-3"></i>Form Booking
+                        </button>
+                        <button onclick="showSection('listSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-list mr-3"></i>Semua Booking
+                        </button>
+                        <button onclick="showSection('rulesSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-clipboard-list mr-3"></i>Tata Tertib
+                        </button>
+                        <button onclick="showSection('gallerySection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-images mr-3"></i>Galeri
+                        </button>
+                        <button onclick="showSection('contactSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-phone mr-3"></i>Kontak Admin
+                        </button>
+                        <button onclick="showSection('manageUsersSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-users-cog mr-3"></i>Kelola User
+                        </button>
+                        <button onclick="showSection('reportsSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-chart-bar mr-3"></i>Laporan
+                        </button>
+                        <button onclick="showSection('manageComputersSection')" class="sidebar-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 transition duration-300">
+                            <i class="fas fa-desktop mr-3"></i>Kelola Komputer
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('labkom_currentUser');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+
+
+        // Booking form functionality
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                id: Date.now(),
+                teacherName: document.getElementById('teacherName').value,
+                subject: document.getElementById('subject').value,
+                className: document.getElementById('className').value,
+                studentCount: document.getElementById('studentCount').value,
+                date: document.getElementById('bookingDate').value,
+                timeSlot: document.getElementById('timeSlot').value,
+                description: document.getElementById('description').value,
+                status: 'Aktif',
+                bookedBy: currentUser.name,
+                bookedAt: new Date().toLocaleString('id-ID')
+            };
+            
+            // Check if slot is already booked
+            const existingBooking = bookings.find(booking => 
+                booking.date === formData.date && 
+                booking.timeSlot === formData.timeSlot &&
+                booking.status === 'Aktif'
+            );
+            
+            if (existingBooking) {
+                alert('Maaf, slot waktu tersebut sudah dibooking oleh guru lain!');
+                return;
+            }
+            
+            bookings.push(formData);
+            localStorage.setItem('labkom_bookings', JSON.stringify(bookings));
+            broadcastDataChange('bookings', 'create');
+            alert('Booking berhasil disimpan!');
+            document.getElementById('bookingForm').reset();
+            updateDashboard();
+        });
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('bookingForm').reset();
+        }
+
+        // Initialize default data
+        function initializeDefaultData() {
+            // Initialize default rules if empty
+            if (rules.length === 0) {
+                rules = {
+                    teacher: [
+                        'Harap datang 10 menit sebelum jam pelajaran dimulai',
+                        'Pastikan semua komputer dalam kondisi baik sebelum digunakan',
+                        'Laporkan kerusakan komputer kepada admin segera',
+                        'Dampingi siswa selama proses pembelajaran',
+                        'Matikan semua komputer setelah selesai pembelajaran'
+                    ],
+                    student: [
+                        'Cuci tangan sebelum menggunakan komputer',
+                        'Duduk dengan posisi yang benar',
+                        'Jangan makan atau minum di dekat komputer',
+                        'Gunakan komputer sesuai dengan instruksi guru',
+                        'Simpan file dengan nama yang jelas dan teratur'
+                    ],
+                    prohibition: [
+                        'Dilarang mengakses situs yang tidak berkaitan dengan pembelajaran',
+                        'Dilarang mengunduh software tanpa izin',
+                        'Dilarang mengubah setting komputer',
+                        'Dilarang bermain game selama jam pelajaran',
+                        'Dilarang membawa makanan dan minuman ke dalam lab'
+                    ]
+                };
+                localStorage.setItem('labkom_rules', JSON.stringify(rules));
+            }
+
+            // Initialize default computers if empty
+            if (computers.length === 0) {
+                computers = [];
+                for (let i = 1; i <= 30; i++) {
+                    const status = i <= 26 ? 'Aktif' : (i <= 28 ? 'Perbaikan' : 'Rusak');
+                    const notes = status === 'Perbaikan' ? 
+                        (i === 27 ? 'Masalah keyboard' : 'Update software') :
+                        (status === 'Rusak' ? 
+                            (i === 29 ? 'Motherboard rusak' : 'Monitor tidak menyala') : 
+                            'Kondisi baik');
+                    
+                    computers.push({
+                        id: i,
+                        name: `PC-${i.toString().padStart(2, '0')}`,
+                        status: status,
+                        specs: 'Intel i5, 8GB RAM, 256GB SSD',
+                        notes: notes
+                    });
+                }
+                localStorage.setItem('labkom_computers', JSON.stringify(computers));
+            }
+
+            // Load rules and computers from localStorage
+            rules = JSON.parse(localStorage.getItem('labkom_rules')) || rules;
+            computers = JSON.parse(localStorage.getItem('labkom_computers')) || computers;
+            
+            // Update displays
+            displayRules();
+            updateComputersList();
+        }
+
+        // Show section functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update sidebar active state
+            const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+            sidebarBtns.forEach(btn => btn.classList.remove('sidebar-active'));
+            event.target.classList.add('sidebar-active');
+            
+            // Close mobile sidebar
+            closeMobileSidebar();
+            
+            // Load section-specific data
+            if (sectionId === 'listSection') {
+                displayBookings();
+            } else if (sectionId === 'scheduleSection') {
+                displaySchedule();
+            } else if (sectionId === 'gallerySection') {
+                displayGallery();
+            } else if (sectionId === 'rulesSection') {
+                displayRules();
+            } else if (sectionId === 'manageUsersSection' && currentUser.role === 'admin') {
+                updateUsersList();
+            } else if (sectionId === 'manageComputersSection' && currentUser.role === 'admin') {
+                updateComputersList();
+            } else if (sectionId === 'reportsSection' && currentUser.role === 'admin') {
+                updateReportStatistics(bookings);
+            }
+        }
+
+        // Mobile sidebar functions
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = bookings.filter(booking => booking.date === today && booking.status === 'Aktif');
+            
+            document.getElementById('todayBookings').textContent = todayBookings.length;
+            document.getElementById('usedSlots').textContent = todayBookings.length;
+            document.getElementById('availableSlots').textContent = 6 - todayBookings.length;
+            
+            // Update today's schedule
+            updateTodaySchedule();
+        }
+
+        // Update today's schedule
+        function updateTodaySchedule() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = bookings.filter(booking => booking.date === today && booking.status === 'Aktif');
+            const scheduleContainer = document.getElementById('todaySchedule');
+            
+            scheduleContainer.innerHTML = '';
+            
+            timeSlots.forEach((slot, index) => {
+                const booking = todayBookings.find(b => b.timeSlot === slot);
+                const isBooked = !!booking;
+                
+                const scheduleItem = document.createElement('div');
+                scheduleItem.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-3';
+                
+                scheduleItem.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-${isBooked ? 'red' : 'green'}-100 p-2 rounded-lg">
+                            <i class="fas fa-${isBooked ? 'times' : 'check'} text-${isBooked ? 'red' : 'green'}-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">${slot}</p>
+                            <p class="text-sm text-gray-600">${isBooked ? booking.teacherName + ' - ' + booking.className : 'Tersedia'}</p>
+                        </div>
+                    </div>
+                    <span class="bg-${isBooked ? 'red' : 'green'}-100 text-${isBooked ? 'red' : 'green'}-800 px-3 py-1 rounded-full text-sm">
+                        ${isBooked ? 'Terpakai' : 'Kosong'}
+                    </span>
+                `;
+                
+                scheduleContainer.appendChild(scheduleItem);
+            });
+        }
+
+        // Display bookings
+        function displayBookings() {
+            const bookingList = document.getElementById('bookingList');
+            const bookingCardsList = document.getElementById('bookingCardsList');
+            
+            // Show/hide admin actions
+            const adminActions = document.getElementById('adminBookingActions');
+            if (currentUser && currentUser.role === 'admin') {
+                adminActions.classList.remove('hidden');
+            } else {
+                adminActions.classList.add('hidden');
+            }
+            
+            // Filter bookings based on user role
+            let displayedBookings = bookings;
+            if (currentUser && currentUser.role === 'guru') {
+                // Guru hanya bisa lihat booking mereka sendiri
+                displayedBookings = bookings.filter(booking => booking.bookedBy === currentUser.name);
+            }
+            
+            if (displayedBookings.length === 0) {
+                const message = currentUser && currentUser.role === 'guru' ? 
+                    'Anda belum memiliki booking' : 
+                    'Belum ada booking yang tersedia';
+                const subMessage = currentUser && currentUser.role === 'guru' ? 
+                    'Silakan buat booking baru melalui form booking' : 
+                    'Silakan tunggu guru membuat booking';
+                
+                // Desktop empty state
+                bookingList.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-12 text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-calendar-times text-6xl mb-4 text-gray-300"></i>
+                                <p class="text-lg font-medium">${message}</p>
+                                <p class="text-sm text-gray-400 mt-2">${subMessage}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                // Mobile empty state
+                bookingCardsList.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-calendar-times text-6xl mb-4 text-gray-300"></i>
+                            <p class="text-lg font-medium">${message}</p>
+                            <p class="text-sm text-gray-400 mt-2">${subMessage}</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Desktop table view
+            bookingList.innerHTML = displayedBookings.map((booking, index) => `
+                <tr class="table-row border-b border-gray-200">
+                    <td class="py-4 px-6 text-sm text-gray-800">${index + 1}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${new Date(booking.date).toLocaleDateString('id-ID')}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${booking.timeSlot}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${booking.teacherName}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${booking.className}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${booking.subject}</td>
+                    <td class="py-4 px-6 text-sm text-gray-800">${booking.studentCount}</td>
+                    <td class="py-4 px-6">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                            ${booking.status}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex space-x-2">
+                            ${currentUser && currentUser.role === 'admin' ? `
+                                <button onclick="editBooking(${booking.id})" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600 transition duration-300 touch-btn-xs">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteBooking(${booking.id})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600 transition duration-300 touch-btn-xs">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : `
+                                <span class="text-xs text-gray-500">-</span>
+                            `}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Mobile card view
+            bookingCardsList.innerHTML = displayedBookings.map((booking, index) => `
+                <div class="bg-white rounded-lg shadow-sm border p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs font-medium">#${index + 1}</span>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">${booking.status}</span>
+                        </div>
+                        ${currentUser && currentUser.role === 'admin' ? `
+                            <div class="flex space-x-1">
+                                <button onclick="editBooking(${booking.id})" class="bg-blue-500 text-white p-1 rounded text-xs hover:bg-blue-600 transition duration-300 touch-btn-xs">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteBooking(${booking.id})" class="bg-red-500 text-white p-1 rounded text-xs hover:bg-red-600 transition duration-300 touch-btn-xs">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Tanggal:</span>
+                            <span class="text-sm font-medium">${new Date(booking.date).toLocaleDateString('id-ID')}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Waktu:</span>
+                            <span class="text-sm font-medium">${booking.timeSlot}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Guru:</span>
+                            <span class="text-sm font-medium">${booking.teacherName}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Kelas:</span>
+                            <span class="text-sm font-medium">${booking.className}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Mata Pelajaran:</span>
+                            <span class="text-sm font-medium">${booking.subject}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Jumlah Siswa:</span>
+                            <span class="text-sm font-medium">${booking.studentCount}</span>
+                        </div>
+                        ${booking.description ? `
+                            <div class="pt-2 border-t">
+                                <span class="text-sm text-gray-600">Keterangan:</span>
+                                <p class="text-sm text-gray-800 mt-1">${booking.description}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display rules
+        function displayRules() {
+            const teacherRules = document.getElementById('teacherRules');
+            const studentRules = document.getElementById('studentRules');
+            const prohibitionRules = document.getElementById('prohibitionRules');
+            
+            if (rules.teacher) {
+                teacherRules.innerHTML = rules.teacher.map((rule, index) => `
+                    <li class="flex items-start space-x-3 text-blue-700 bg-white bg-opacity-60 p-3 rounded-lg">
+                        <span class="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-xs font-bold min-w-[24px] text-center">${index + 1}</span>
+                        <span class="flex-1">${rule}</span>
+                        ${editMode && currentUser && currentUser.role === 'admin' ? `
+                            <button onclick="deleteRule('teacher', ${index})" class="text-red-500 hover:text-red-700 ml-2">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                        ` : ''}
+                    </li>
+                `).join('');
+            }
+            
+            if (rules.student) {
+                studentRules.innerHTML = rules.student.map((rule, index) => `
+                    <li class="flex items-start space-x-3 text-green-700 bg-white bg-opacity-60 p-3 rounded-lg">
+                        <span class="bg-green-200 text-green-800 px-2 py-1 rounded-full text-xs font-bold min-w-[24px] text-center">${index + 1}</span>
+                        <span class="flex-1">${rule}</span>
+                        ${editMode && currentUser && currentUser.role === 'admin' ? `
+                            <button onclick="deleteRule('student', ${index})" class="text-red-500 hover:text-red-700 ml-2">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                        ` : ''}
+                    </li>
+                `).join('');
+            }
+            
+            if (rules.prohibition) {
+                prohibitionRules.innerHTML = rules.prohibition.map((rule, index) => `
+                    <li class="flex items-start space-x-3 text-red-700 bg-white bg-opacity-60 p-3 rounded-lg">
+                        <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full text-xs font-bold min-w-[24px] text-center">${index + 1}</span>
+                        <span class="flex-1">${rule}</span>
+                        ${editMode && currentUser && currentUser.role === 'admin' ? `
+                            <button onclick="deleteRule('prohibition', ${index})" class="text-red-500 hover:text-red-700 ml-2">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                        ` : ''}
+                    </li>
+                `).join('');
+            }
+        }
+
+        // Display gallery
+        function displayGallery() {
+            // Gallery functionality would go here
+        }
+
+        // Display schedule
+        function displaySchedule() {
+            const scheduleTable = document.getElementById('scheduleTable');
+            const scheduleCardsList = document.getElementById('scheduleCardsList');
+            
+            // Get all unique dates from bookings
+            const allDates = [...new Set(bookings.map(booking => booking.date))].sort();
+            
+            if (allDates.length === 0) {
+                // Desktop empty state
+                scheduleTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-12 text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-calendar-alt text-6xl mb-4 text-gray-300"></i>
+                                <p class="text-lg font-medium">Belum ada jadwal booking</p>
+                                <p class="text-sm text-gray-400 mt-2">Jadwal akan muncul setelah ada booking yang dibuat</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                // Mobile empty state
+                scheduleCardsList.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-calendar-alt text-6xl mb-4 text-gray-300"></i>
+                            <p class="text-lg font-medium">Belum ada jadwal booking</p>
+                            <p class="text-sm text-gray-400 mt-2">Jadwal akan muncul setelah ada booking yang dibuat</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Desktop table view
+            scheduleTable.innerHTML = allDates.map(date => {
+                const dateBookings = bookings.filter(booking => booking.date === date && booking.status === 'Aktif');
+                
+                return `
+                    <tr class="border-b border-gray-200">
+                        <td class="py-4 px-4 text-sm font-medium text-gray-800">
+                            ${new Date(date).toLocaleDateString('id-ID', { 
+                                weekday: 'short', 
+                                year: 'numeric', 
+                                month: 'short', 
+                                day: 'numeric' 
+                            })}
+                        </td>
+                        ${timeSlots.map(slot => {
+                            const booking = dateBookings.find(b => b.timeSlot === slot);
+                            if (booking) {
+                                return `
+                                    <td class="py-4 px-4 text-xs">
+                                        <div class="bg-red-100 border border-red-200 rounded-lg p-2">
+                                            <div class="font-medium text-red-800">${booking.teacherName}</div>
+                                            <div class="text-red-600">${booking.className}</div>
+                                            <div class="text-red-500 text-xs">${booking.subject}</div>
+                                        </div>
+                                    </td>
+                                `;
+                            } else {
+                                return `
+                                    <td class="py-4 px-4 text-xs">
+                                        <div class="bg-green-100 border border-green-200 rounded-lg p-2 text-center">
+                                            <div class="text-green-600 font-medium">Tersedia</div>
+                                        </div>
+                                    </td>
+                                `;
+                            }
+                        }).join('')}
+                    </tr>
+                `;
+            }).join('');
+            
+            // Mobile card view
+            scheduleCardsList.innerHTML = allDates.map(date => {
+                const dateBookings = bookings.filter(booking => booking.date === date && booking.status === 'Aktif');
+                
+                return `
+                    <div class="bg-white rounded-lg shadow-sm border p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-800">
+                                ${new Date(date).toLocaleDateString('id-ID', { 
+                                    weekday: 'long', 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                })}
+                            </h3>
+                            <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs font-medium">
+                                ${dateBookings.length}/6 Slot Terpakai
+                            </span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 gap-2">
+                            ${timeSlots.map((slot, index) => {
+                                const booking = dateBookings.find(b => b.timeSlot === slot);
+                                if (booking) {
+                                    return `
+                                        <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-1">
+                                                    <div class="font-medium text-red-800">${slot}</div>
+                                                    <div class="text-sm text-red-700 mt-1">${booking.teacherName}</div>
+                                                    <div class="text-sm text-red-600">${booking.className} - ${booking.subject}</div>
+                                                    <div class="text-xs text-red-500 mt-1">${booking.studentCount} siswa</div>
+                                                </div>
+                                                <span class="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-medium">Terpakai</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    return `
+                                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-green-800">${slot}</div>
+                                                    <div class="text-sm text-green-600 mt-1">Slot tersedia</div>
+                                                </div>
+                                                <span class="bg-green-200 text-green-800 px-2 py-1 rounded text-xs font-medium">Tersedia</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update users list
+        function updateUsersList() {
+            const usersList = document.getElementById('usersList');
+            if (usersList) {
+                usersList.innerHTML = users.map(user => `
+                    <tr class="border-b border-gray-200">
+                        <td class="py-3 px-4 text-sm">${user.username}</td>
+                        <td class="py-3 px-4 text-sm">${user.role}</td>
+                        <td class="py-3 px-4 text-sm">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Aktif</span>
+                        </td>
+                        <td class="py-3 px-4 text-sm">
+                            <button onclick="deleteUser('${user.username}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600 transition duration-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Update computers list
+        function updateComputersList() {
+            const computersList = document.getElementById('computersList');
+            if (computersList) {
+                computersList.innerHTML = computers.map(computer => `
+                    <tr class="border-b border-gray-200">
+                        <td class="py-3 px-4 text-sm">${computer.name}</td>
+                        <td class="py-3 px-4 text-sm">
+                            <span class="bg-${computer.status === 'Aktif' ? 'green' : computer.status === 'Perbaikan' ? 'yellow' : 'red'}-100 text-${computer.status === 'Aktif' ? 'green' : computer.status === 'Perbaikan' ? 'yellow' : 'red'}-800 px-2 py-1 rounded-full text-xs">
+                                ${computer.status}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-sm">${computer.specs}</td>
+                        <td class="py-3 px-4 text-sm">${computer.notes}</td>
+                        <td class="py-3 px-4 text-sm">
+                            <button onclick="deleteComputer(${computer.id})" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600 transition duration-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Update teacher dropdown
+        function updateTeacherDropdown() {
+            // Teacher dropdown functionality would go here
+        }
+
+        // Filter schedule by date
+        function filterSchedule() {
+            const filterDate = document.getElementById('scheduleFilterDate').value;
+            if (!filterDate) {
+                alert('Silakan pilih tanggal terlebih dahulu');
+                return;
+            }
+            
+            const scheduleTable = document.getElementById('scheduleTable');
+            const scheduleCardsList = document.getElementById('scheduleCardsList');
+            
+            const dateBookings = bookings.filter(booking => booking.date === filterDate && booking.status === 'Aktif');
+            
+            // Desktop table view
+            scheduleTable.innerHTML = `
+                <tr class="border-b border-gray-200">
+                    <td class="py-4 px-4 text-sm font-medium text-gray-800">
+                        ${new Date(filterDate).toLocaleDateString('id-ID', { 
+                            weekday: 'short', 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric' 
+                        })}
+                    </td>
+                    ${timeSlots.map(slot => {
+                        const booking = dateBookings.find(b => b.timeSlot === slot);
+                        if (booking) {
+                            return `
+                                <td class="py-4 px-4 text-xs">
+                                    <div class="bg-red-100 border border-red-200 rounded-lg p-2">
+                                        <div class="font-medium text-red-800">${booking.teacherName}</div>
+                                        <div class="text-red-600">${booking.className}</div>
+                                        <div class="text-red-500 text-xs">${booking.subject}</div>
+                                    </div>
+                                </td>
+                            `;
+                        } else {
+                            return `
+                                <td class="py-4 px-4 text-xs">
+                                    <div class="bg-green-100 border border-green-200 rounded-lg p-2 text-center">
+                                        <div class="text-green-600 font-medium">Tersedia</div>
+                                    </div>
+                                </td>
+                            `;
+                        }
+                    }).join('')}
+                </tr>
+            `;
+            
+            // Mobile card view
+            scheduleCardsList.innerHTML = `
+                <div class="bg-white rounded-lg shadow-sm border p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">
+                            ${new Date(filterDate).toLocaleDateString('id-ID', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                        </h3>
+                        <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs font-medium">
+                            ${dateBookings.length}/6 Slot Terpakai
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-2">
+                        ${timeSlots.map((slot, index) => {
+                            const booking = dateBookings.find(b => b.timeSlot === slot);
+                            if (booking) {
+                                return `
+                                    <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex-1">
+                                                <div class="font-medium text-red-800">${slot}</div>
+                                                <div class="text-sm text-red-700 mt-1">${booking.teacherName}</div>
+                                                <div class="text-sm text-red-600">${booking.className} - ${booking.subject}</div>
+                                                <div class="text-xs text-red-500 mt-1">${booking.studentCount} siswa</div>
+                                            </div>
+                                            <span class="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-medium">Terpakai</span>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                return `
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <div class="font-medium text-green-800">${slot}</div>
+                                                <div class="text-sm text-green-600 mt-1">Slot tersedia</div>
+                                            </div>
+                                            <span class="bg-green-200 text-green-800 px-2 py-1 rounded text-xs font-medium">Tersedia</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show all schedule
+        function showAllSchedule() {
+            displaySchedule();
+        }
+
+        // Update report statistics
+        function updateReportStatistics(bookings) {
+            // Report statistics functionality would go here
+        }
+
+        // Check if user is already logged in
+        if (currentUser) {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            document.getElementById('userWelcome').textContent = `Selamat datang, ${currentUser.name}`;
+            document.getElementById('userRole').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+            
+            const mobileUserRole = document.getElementById('mobileUserRole');
+            if (mobileUserRole) {
+                mobileUserRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+            }
+            
+            setupRoleBasedAccess();
+            updateDashboard();
+            initializeDefaultData();
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a1ec1946ddce3d',t:'MTc1OTcxOTc3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
